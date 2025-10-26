@@ -144,7 +144,7 @@
       />
 
       <a
-        download
+        download="button.png"
         href={downloadURL}
         class="px-4 py-2 flex items-center gap-2 font-bold {downloadURL ? 'bg-white text-black hover:scale-105 active:scale-100 duration-100' : 'bg-neutral-800 text-neutral-600 cursor-not-allowed'}"
       >
