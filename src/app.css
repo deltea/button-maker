@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-black text-white font-mono selection:bg-white selection:text-black
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
