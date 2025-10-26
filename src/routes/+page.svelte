@@ -113,6 +113,7 @@
           drop an image
         </div>
       {/if}
+
       <canvas
         onmousedown={onCropMouseDown}
         bind:this={canvas}
