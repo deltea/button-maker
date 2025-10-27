@@ -110,6 +110,8 @@
   function onTouchMove(e: TouchEvent) {
     if (!isDragging || !imgElement) return;
 
+    e.preventDefault();
+
     const touch = e.touches[0];
     const movementY = touch.clientY - lastTouchY;
     lastTouchY = touch.clientY;
