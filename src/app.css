@@ -6,6 +6,7 @@
 }
 
 body {
+  overscroll-behavior: none;
   @apply bg-black text-white font-mono selection:bg-white selection:text-black;
 }
 
