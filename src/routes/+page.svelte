@@ -197,7 +197,7 @@
       <ColorPicker
         bind:hex={colorPicker}
         onInput={() => drawImage()}
-        label={isMobile() ? "border color" : ""}
+        label={isMobile() ? "" : "border color"}
         isDialog={true}
         --picker-height="200px"
         --picker-width="200px"
