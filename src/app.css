@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --border-3: 3px;
+}
+
 body {
   @apply bg-black text-white font-mono selection:bg-white selection:text-black
 }

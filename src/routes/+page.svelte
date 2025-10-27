@@ -19,6 +19,7 @@
   let imgElement: HTMLImageElement | null = $state(null);
   let downloadURL: string | null = $state(null);
   let colorPicker = $state("#ffffff");
+  let fileInput: HTMLInputElement;
 
   function onUpload(file: File) {
     cropPos = { x: 0, y: 0 };
@@ -44,6 +45,18 @@
       }
     } else {
       console.error("no file dropped");
+    }
+  }
+
+  function fileInputChange(e: Event) {
+    const target = e.target as HTMLInputElement;
+    const files = target.files;
+    if (files && files.length > 0) {
+      if (validFileTypes.includes(files[0].type)) {
+        onUpload(files[0]);
+      } else {
+        console.error("invalid file type");
+      }
     }
   }
 
@@ -109,9 +122,12 @@
       {#if image}
         <img bind:this={imgElement} src={imgSrc} alt="img preview" class="w-full brightness-[20%]">
       {:else}
-        <div class="size-full aspect-square border-4 border-dashed border-neutral-800 flex items-center justify-center">
-          drop an image
-        </div>
+        <button
+          onclick={() => fileInput.click()}
+          class="size-full aspect-square border-3 border-dashed border-neutral-800 flex items-center justify-center cursor-pointer hover:border-neutral-700 duration-100"
+        >
+          drop or select an image
+        </button>
       {/if}
 
       <canvas
@@ -136,6 +152,7 @@
         --slider-width="25px"
         --picker-indicator-size="25px"
         --picker-z-index="10"
+        --border-radius="0px"
         --focus-color="white"
         --cp-bg-color="var(--color-neutral-950)"
         --cp-text-color="white"
@@ -153,5 +170,15 @@
       </a>
     </div>
   </div>
-
 </div>
+
+<input
+  onchange={fileInputChange}
+  bind:this={fileInput}
+  accept={validFileTypes.join(",")}
+  type="file"
+  name="image"
+  id="image"
+  class="hidden"
+  multiple={false}
+/>
