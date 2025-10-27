@@ -15,6 +15,7 @@
   let imgSrc: string | null = $state(null);
   let cropPos = $state({ x: 0, y: 0 });
   let isDragging = false;
+  let lastTouchY = 0;
   let image: HTMLImageElement | null = $state(null);
   let imgElement: HTMLImageElement | null = $state(null);
   let downloadURL: string | null = $state(null);
@@ -96,6 +97,28 @@
     drawImage();
   }
 
+  function onTouchStart(e: TouchEvent) {
+    e.preventDefault();
+    isDragging = true;
+    lastTouchY = e.touches[0].clientY;
+  }
+
+  function onTouchMove(e: TouchEvent) {
+    if (!isDragging || !imgElement) return;
+
+    const touch = e.touches[0];
+    const movementY = touch.clientY - lastTouchY;
+    lastTouchY = touch.clientY;
+
+    cropPos.y += movementY;
+    cropPos.y = clamp(cropPos.y, 0, imgElement.clientHeight - canvas.clientHeight);
+    drawImage();
+  }
+
+  function onTouchEnd(e: TouchEvent) {
+    isDragging = false;
+  }
+
   function onMouseUp(e: MouseEvent) {
     e.preventDefault();
     isDragging = false;
@@ -106,6 +129,9 @@
 
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
+
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
+    document.addEventListener("touchend", onTouchEnd);
   });
 </script>
 
@@ -115,12 +141,17 @@
   ondragover={e => e.preventDefault()}
   class="h-full p-8 flex justify-center items-center"
 >
-  <div class="flex flex-col gap-6 itemscenter">
+  <div class="flex flex-col gap-6 items-center sm:items-start">
     <h1 class="font-bold">88x31 BUTTON MAKER</h1>
 
-    <div class="w-[32rem] relative">
+    <div class="sm:w-[36rem] w-[20rem] relative">
       {#if image}
-        <img bind:this={imgElement} src={imgSrc} alt="img preview" class="w-full brightness-[20%]">
+        <img
+          bind:this={imgElement}
+          src={imgSrc}
+          alt="img preview"
+          class="w-full brightness-[20%]"
+        >
       {:else}
         <button
           onclick={() => fileInput.click()}
@@ -132,12 +163,13 @@
 
       <canvas
         onmousedown={onCropMouseDown}
+        ontouchstart={onTouchStart}
         bind:this={canvas}
         width={88}
         height={31}
         style:left="{cropPos.x}px"
         style:top="{cropPos.y}px"
-        class="w-full pixelated absolute"
+        class="w-full pixelated absolute active:cursor-grabbing bg-red-500 {image ? 'cursor-grab' : 'pointer-events-none hidden'}"
       ></canvas>
     </div>
 
