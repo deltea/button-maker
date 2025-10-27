@@ -2,10 +2,11 @@
 
 @theme {
   --border-3: 3px;
+  --height-screen: 100dvh;
 }
 
 body {
-  @apply bg-black text-white font-mono selection:bg-white selection:text-black
+  @apply bg-black text-white font-mono selection:bg-white selection:text-black;
 }
 
 .pixelated {
