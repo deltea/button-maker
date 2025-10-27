@@ -22,6 +22,10 @@
   let colorPicker = $state("#ffffff");
   let fileInput: HTMLInputElement;
 
+  function isMobile() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  }
+
   function onUpload(file: File) {
     cropPos = { x: 0, y: 0 };
 
@@ -141,8 +145,24 @@
   ondragover={e => e.preventDefault()}
   class="h-full p-8 flex justify-center items-center"
 >
-  <div class="flex flex-col gap-6 items-center sm:items-start">
-    <h1 class="font-bold">88x31 BUTTON MAKER</h1>
+  <div class="flex flex-col gap-6 items-start">
+    <div class="flex justify-between w-full">
+      <h1 class="font-bold">88x31 BUTTON MAKER</h1>
+
+      {#if image}
+        <button
+          onclick={() => {
+            image = null;
+            imgSrc = null;
+            downloadURL = null;
+          }}
+          class="flex gap-2 items-center text-neutral-400 font-bold cursor-pointer hover:text-white duration-100"
+        >
+          <iconify-icon icon="mingcute:repeat-fill" class="text-xl"></iconify-icon>
+          <span class="hidden sm:block">restart</span>
+        </button>
+      {/if}
+    </div>
 
     <div class="sm:w-[36rem] w-[20rem] relative">
       {#if image}
@@ -177,7 +197,7 @@
       <ColorPicker
         bind:hex={colorPicker}
         onInput={() => drawImage()}
-        label="border color"
+        label={isMobile() ? "border color" : ""}
         isDialog={true}
         --picker-height="200px"
         --picker-width="200px"
